@@ -1,0 +1,5 @@
+= Monbeat Docs
+
+Welcome to the Monbeat documentation.
+
+
