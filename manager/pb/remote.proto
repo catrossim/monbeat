@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package pb ;
+import "google/protobuf/empty.proto" ;
+
+enum ResultCode{
+    SUCCESS = 0 ;
+    FAILURE = 1 ;
+    UNKNOWN = 2 ; 
+}
+
+message Response{
+    ResultCode code = 1 ;
+    string result = 2 ;
+    int64 timestamp = 3 ;
+}
+
+message Chunk{
+    bytes content = 1 ;
+}
+
+service Remote {
+    rpc Ping(google.protobuf.Empty) returns (Response){}
+    rpc Execute(stream Chunk) returns (Response){}
+}
+

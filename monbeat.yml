@@ -3,8 +3,27 @@
 ############################# Monbeat ######################################
 
 monbeat:
-  # Defines how often an event is sent to the output
-  period: 1s
+  modules: 
+    - module: file_rb
+      paths:
+        - path: /Users/catrossim/Downloads/tmp/file1
+          internal: 10
+          fulltext.enable: true
+        - path: /Users/catrossim/Downloads/tmp/file2
+          fulltext.enable: false
+          internal: 10
+      enabled: false
+    - module: command
+      cmds:
+        - cmd: cat /Users/catrossim/Downloads/tmp/file1
+          internal: 10
+      enabled: false
+  data.dir: /tmp/monbeat
+  manager:
+    network: tcp
+    address: :31080
+    work.dir: /tmp
+
 
 #================================ General =====================================
 
@@ -62,11 +81,12 @@ setup.kibana:
 #================================ Outputs =====================================
 
 # Configure what output to use when sending the data collected by the beat.
-
+output.console:
+  pretty: true
 #-------------------------- Elasticsearch output ------------------------------
-output.elasticsearch:
+# output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["localhost:9200"]
+  # hosts: ["localhost:9200"]
 
   # Optional protocol and basic auth credentials.
   #protocol: "https"

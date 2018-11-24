@@ -3,12 +3,14 @@
 
 package config
 
-import "time"
+import (
+	"github.com/elastic/beats/libbeat/common"
+)
 
 type Config struct {
-	Period time.Duration `config:"period"`
+	Modules []*common.Config `config:"modules"`
+	DataDir string           `config:"data.dir"`
+	Manager *common.Config   `config:"manager"`
 }
 
-var DefaultConfig = Config{
-	Period: 1 * time.Second,
-}
+var DefaultConfig = Config{}

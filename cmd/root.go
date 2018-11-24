@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/catrossim/monbeat/beater"
 
+	_ "github.com/catrossim/monbeat/include"
 	cmd "github.com/elastic/beats/libbeat/cmd"
 )
 
