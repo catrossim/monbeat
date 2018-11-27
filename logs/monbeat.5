@@ -1,27 +1,44 @@
-2018-10-09T09:11:42.779+0800	INFO	instance/beat.go:544	Home path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat] Config path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat] Data path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/data] Logs path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/logs]
-2018-10-09T09:11:42.780+0800	INFO	instance/beat.go:551	Beat UUID: 070a4cc3-6245-42e8-949f-1dbbec144e7e
-2018-10-09T09:11:42.780+0800	INFO	[beat]	instance/beat.go:768	Beat info	{"system_info": {"beat": {"path": {"config": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat", "data": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/data", "home": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat", "logs": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/logs"}, "type": "monbeat", "uuid": "070a4cc3-6245-42e8-949f-1dbbec144e7e"}}}
-2018-10-09T09:11:42.780+0800	INFO	[beat]	instance/beat.go:777	Build info	{"system_info": {"build": {"commit": "unknown", "libbeat": "6.4.2", "time": "1754-08-30T22:43:41.128Z", "version": "6.4.2"}}}
-2018-10-09T09:11:42.780+0800	INFO	[beat]	instance/beat.go:780	Go runtime info	{"system_info": {"go": {"os":"darwin","arch":"amd64","max_procs":4,"version":"go1.10.3"}}}
-2018-10-09T09:11:42.781+0800	INFO	[beat]	instance/beat.go:784	Host info	{"system_info": {"host": {"architecture":"x86_64","boot_time":"2018-08-27T21:04:05+08:00","hostname":"nest","ips":["::1/128","127.0.0.1/8","fe80::1/64","fe80::6e40:8ff:fe93:2dc8/64","192.168.160.63/19","fe80::44a8:a6ff:fe56:fd60/64"],"kernel_version":"15.6.0","mac_addresses":["6c:40:08:93:2d:c8","72:00:06:02:4f:30","72:00:06:02:4f:31","0e:40:08:93:2d:c8","46:a8:a6:56:fd:60","6e:40:08:39:1a:00"],"os":{"family":"darwin","platform":"darwin","name":"Mac OS X","version":"10.11.6","major":10,"minor":11,"patch":6,"build":"15G31"},"timezone":"CST","timezone_offset_sec":28800}}}
-2018-10-09T09:11:42.781+0800	INFO	[beat]	instance/beat.go:813	Process info	{"system_info": {"process": {"cwd": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat", "exe": "./monbeat", "name": "monbeat", "pid": 52267, "ppid": 51773, "start_time": "2018-10-09T09:11:42.759+0800"}}}
-2018-10-09T09:11:42.781+0800	INFO	instance/beat.go:273	Setup Beat: monbeat; Version: 6.4.2
-2018-10-09T09:11:42.781+0800	INFO	elasticsearch/client.go:163	Elasticsearch url: http://localhost:9200
-2018-10-09T09:11:42.781+0800	INFO	pipeline/module.go:98	Beat name: nest
-2018-10-09T09:11:42.782+0800	INFO	[monitoring]	log/log.go:114	Starting metrics logging every 30s
-2018-10-09T09:11:42.782+0800	INFO	instance/beat.go:367	monbeat start running.
-2018-10-09T09:11:42.782+0800	INFO	beater/monbeat.go:37	monbeat is running! Hit CTRL-C to stop it.
-2018-10-09T09:11:43.786+0800	INFO	beater/monbeat.go:62	Event sent
-2018-10-09T09:11:44.787+0800	INFO	beater/monbeat.go:62	Event sent
-2018-10-09T09:11:44.791+0800	INFO	pipeline/output.go:95	Connecting to backoff(elasticsearch(http://localhost:9200))
-2018-10-09T09:11:45.786+0800	INFO	beater/monbeat.go:62	Event sent
-2018-10-09T09:11:45.799+0800	ERROR	pipeline/output.go:100	Failed to connect to backoff(elasticsearch(http://localhost:9200)): Get http://localhost:9200: dial tcp [::1]:9200: connect: connection refused
-2018-10-09T09:11:45.799+0800	INFO	pipeline/output.go:93	Attempting to reconnect to backoff(elasticsearch(http://localhost:9200)) with 1 reconnect attempt(s)
-2018-10-09T09:11:46.784+0800	INFO	beater/monbeat.go:62	Event sent
-2018-10-09T09:11:47.787+0800	INFO	beater/monbeat.go:62	Event sent
-2018-10-09T09:11:47.801+0800	ERROR	pipeline/output.go:100	Failed to connect to backoff(elasticsearch(http://localhost:9200)): Get http://localhost:9200: dial tcp 127.0.0.1:9200: connect: connection refused
-2018-10-09T09:11:47.801+0800	INFO	pipeline/output.go:93	Attempting to reconnect to backoff(elasticsearch(http://localhost:9200)) with 2 reconnect attempt(s)
-2018-10-09T09:11:48.435+0800	INFO	[monitoring]	log/log.go:149	Total non-zero metrics	{"monitoring": {"metrics": {"beat":{"cpu":{"system":{"ticks":17,"time":{"ms":17}},"total":{"ticks":33,"time":{"ms":33},"value":33},"user":{"ticks":16,"time":{"ms":16}}},"info":{"ephemeral_id":"29f69397-1b57-4adc-abac-b1d95d0b4165","uptime":{"ms":5658}},"memstats":{"gc_next":4194304,"memory_alloc":2490080,"memory_total":4041384,"rss":13574144}},"libbeat":{"config":{"module":{"running":0}},"output":{"type":"elasticsearch"},"pipeline":{"clients":0,"events":{"active":5,"published":5,"retry":4,"total":5}}},"system":{"cpu":{"cores":4},"load":{"1":1.8584,"15":2.0913,"5":2.0981,"norm":{"1":0.4646,"15":0.5228,"5":0.5245}}}}}}
-2018-10-09T09:11:48.435+0800	INFO	[monitoring]	log/log.go:150	Uptime: 5.660368348s
-2018-10-09T09:11:48.435+0800	INFO	[monitoring]	log/log.go:127	Stopping metrics logging.
-2018-10-09T09:11:48.435+0800	INFO	instance/beat.go:373	monbeat stopped.
+2018-10-09T09:12:23.594+0800	INFO	instance/beat.go:544	Home path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat] Config path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat] Data path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/data] Logs path: [/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/logs]
+2018-10-09T09:12:23.595+0800	INFO	instance/beat.go:551	Beat UUID: 070a4cc3-6245-42e8-949f-1dbbec144e7e
+2018-10-09T09:12:23.595+0800	INFO	[beat]	instance/beat.go:768	Beat info	{"system_info": {"beat": {"path": {"config": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat", "data": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/data", "home": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat", "logs": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat/logs"}, "type": "monbeat", "uuid": "070a4cc3-6245-42e8-949f-1dbbec144e7e"}}}
+2018-10-09T09:12:23.595+0800	INFO	[beat]	instance/beat.go:777	Build info	{"system_info": {"build": {"commit": "unknown", "libbeat": "6.4.2", "time": "1754-08-30T22:43:41.128Z", "version": "6.4.2"}}}
+2018-10-09T09:12:23.595+0800	INFO	[beat]	instance/beat.go:780	Go runtime info	{"system_info": {"go": {"os":"darwin","arch":"amd64","max_procs":4,"version":"go1.10.3"}}}
+2018-10-09T09:12:23.595+0800	INFO	[beat]	instance/beat.go:784	Host info	{"system_info": {"host": {"architecture":"x86_64","boot_time":"2018-08-27T21:04:05+08:00","hostname":"nest","ips":["::1/128","127.0.0.1/8","fe80::1/64","fe80::6e40:8ff:fe93:2dc8/64","192.168.160.63/19","fe80::44a8:a6ff:fe56:fd60/64"],"kernel_version":"15.6.0","mac_addresses":["6c:40:08:93:2d:c8","72:00:06:02:4f:30","72:00:06:02:4f:31","0e:40:08:93:2d:c8","46:a8:a6:56:fd:60","6e:40:08:39:1a:00"],"os":{"family":"darwin","platform":"darwin","name":"Mac OS X","version":"10.11.6","major":10,"minor":11,"patch":6,"build":"15G31"},"timezone":"CST","timezone_offset_sec":28800}}}
+2018-10-09T09:12:23.595+0800	INFO	[beat]	instance/beat.go:813	Process info	{"system_info": {"process": {"cwd": "/Users/catrossim/go_pkgs/src/github.com/catrossim/monbeat", "exe": "./monbeat", "name": "monbeat", "pid": 52316, "ppid": 51773, "start_time": "2018-10-09T09:12:23.570+0800"}}}
+2018-10-09T09:12:23.596+0800	INFO	instance/beat.go:273	Setup Beat: monbeat; Version: 6.4.2
+2018-10-09T09:12:23.596+0800	INFO	pipeline/module.go:98	Beat name: nest
+2018-10-09T09:12:23.596+0800	INFO	[monitoring]	log/log.go:114	Starting metrics logging every 30s
+2018-10-09T09:12:23.596+0800	INFO	instance/beat.go:367	monbeat start running.
+2018-10-09T09:12:23.596+0800	INFO	beater/monbeat.go:37	monbeat is running! Hit CTRL-C to stop it.
+2018-10-09T09:12:24.602+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:25.602+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:26.601+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:27.598+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:28.599+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:29.602+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:30.600+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:31.600+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:32.602+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:33.598+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:34.597+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:35.602+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:36.601+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:37.598+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:38.599+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:39.600+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:40.597+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:41.602+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:42.602+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:43.600+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:44.598+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:45.600+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:46.600+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:47.599+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:48.600+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:49.599+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:50.601+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:51.601+0800	INFO	beater/monbeat.go:62	Event sent
+2018-10-09T09:12:52.434+0800	INFO	[monitoring]	log/log.go:149	Total non-zero metrics	{"monitoring": {"metrics": {"beat":{"cpu":{"system":{"ticks":26,"time":{"ms":26}},"total":{"ticks":57,"time":{"ms":57},"value":57},"user":{"ticks":31,"time":{"ms":31}}},"info":{"ephemeral_id":"e015b8c4-932f-4326-8403-9a916497de37","uptime":{"ms":28847}},"memstats":{"gc_next":4194304,"memory_alloc":2649688,"memory_total":6085832,"rss":14209024}},"libbeat":{"config":{"module":{"running":0}},"output":{"events":{"acked":28,"batches":16,"total":28},"type":"console","write":{"bytes":8083}},"pipeline":{"clients":0,"events":{"active":0,"published":28,"total":28},"queue":{"acked":28}}},"system":{"cpu":{"cores":4},"load":{"1":2.6128,"15":2.1558,"5":2.2739,"norm":{"1":0.6532,"15":0.5389,"5":0.5685}}}}}}
+2018-10-09T09:12:52.435+0800	INFO	[monitoring]	log/log.go:150	Uptime: 28.847907223s
+2018-10-09T09:12:52.435+0800	INFO	[monitoring]	log/log.go:127	Stopping metrics logging.
+2018-10-09T09:12:52.435+0800	INFO	instance/beat.go:373	monbeat stopped.

@@ -13,7 +13,6 @@ import (
 
 type ModuleWrapper struct {
 	module Module
-	status Scode
 }
 
 func (mw *ModuleWrapper) run(done chan struct{}) chan beat.Event {
@@ -62,7 +61,6 @@ func NewModule(config *common.Config, r *Register) (*ModuleWrapper, error) {
 	logp.Debug("module", "Create module %s", bm.Name())
 	return &ModuleWrapper{
 		module,
-		StatusStandby,
 	}, nil
 }
 

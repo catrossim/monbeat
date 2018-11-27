@@ -15,9 +15,9 @@ monbeat:
       enabled: false
     - module: command
       cmds:
-        - cmd: cat /Users/catrossim/Downloads/tmp/file1
+        - cmd: ulimit
           internal: 10
-      enabled: false
+      enabled: true
   data.dir: /tmp/monbeat
   manager:
     network: tcp
