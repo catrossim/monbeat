@@ -1,6 +1,7 @@
 /.idea
 /build
 logs/*
+conf.d/*
 .DS_Store
 /monbeat
 /monbeat.test
