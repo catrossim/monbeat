@@ -2,27 +2,19 @@
 
 ############################# Monbeat ######################################
 
-monbeat:
-  modules: 
-    - module: file_rb
-      paths:
-        - path: /Users/catrossim/Downloads/tmp/file1
-          internal: 10
-          fulltext.enable: true
-        - path: /Users/catrossim/Downloads/tmp/file2
-          fulltext.enable: false
-          internal: 10
-      enabled: false
-    - module: command
-      cmds:
-        - cmd: ulimit
-          internal: 10
-      enabled: true
+monbeat.config.modules:
   data.dir: /tmp/monbeat
   manager:
     network: tcp
     address: :31080
     work.dir: /tmp
+    registry:
+      address: :8500
+      service: ping
+      tags:
+        - ping
+      deregister.after: 1m
+      interval: 10s
 
 
 #================================ General =====================================
@@ -133,3 +125,4 @@ output.console:
 # have the Elasticsearch output configured, you can simply uncomment the
 # following line.
 #xpack.monitoring.elasticsearch:
+seccomp.enabled: false

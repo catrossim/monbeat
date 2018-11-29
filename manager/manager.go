@@ -2,11 +2,16 @@ package manager
 
 import (
 	"net"
+	"strconv"
+	"strings"
 
-	"github.com/catrossim/monbeat/manager/pb"
-	"github.com/catrossim/monbeat/manager/server"
+	"github.com/catrossim/monbeat/manager/registry"
+
+	"github.com/catrossim/manager/pb"
+	"github.com/catrossim/manager/server"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health/grpc_health_v1"
 
 	"github.com/elastic/beats/libbeat/logp"
 
@@ -44,20 +49,42 @@ func (m *manager) Run() error {
 		return err
 	}
 	pb.RegisterRemoteServer(s, rs)
+	grpc_health_v1.RegisterHealthServer(s, &server.HealthImpl{})
+
+	tokens := strings.Split(m.config.Address, ":")
+	var port int
+	if len(tokens) < 2 {
+		port = 80
+	} else {
+		port, err = strconv.Atoi(tokens[1])
+		if err != nil {
+			return errors.Wrap(err, "invalid port format")
+		}
+	}
+	registry, err := registry.New(m.config.RegistryConfig, registry.ServiceAddress{
+		IP:   tokens[0],
+		Port: port,
+	})
+
+	if err != nil {
+		return err
+	}
+	if err := registry.Register(); err != nil {
+		return err
+	}
 	if err = s.Serve(c); err != nil {
 		return errors.Wrapf(err, "failed to serve tcp connection")
 	}
 	return nil
 }
 
-// func main() {
-// 	m := &manager{
-// 		config: &DefaultServerConfig,
-// 	}
-
-// 	err := m.Run()
-// 	if err != nil {
-// 		logp.Error(err)
-// 		return
-// 	}
-// }
+func main() {
+	m := &manager{
+		config: &DefaultServerConfig,
+	}
+	err := m.Run()
+	if err != nil {
+		logp.Error(err)
+		return
+	}
+}

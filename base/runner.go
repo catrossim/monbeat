@@ -36,7 +36,6 @@ func (r *runner) Run() {
 			defer r.wg.Done()
 			PublishChannels(r.client, output)
 		}()
-		r.wg.Wait()
 	})
 }
 
@@ -44,6 +43,7 @@ func (r *runner) Stop() {
 	r.stopOnce.Do(func() {
 		close(r.done)
 		r.client.Close()
+		r.wg.Wait()
 	})
 }
 

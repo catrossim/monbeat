@@ -1,0 +1,9 @@
+file_rb:  
+  paths:
+    - path: /Users/catrossim/Downloads/tmp/file1
+      internal: 10
+      fulltext.enable: true
+    - path: /Users/catrossim/Downloads/tmp/file2
+      fulltext.enable: false
+      internal: 10
+  enabled: false

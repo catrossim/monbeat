@@ -3,11 +3,8 @@ package command
 import (
 	"bytes"
 	"os/exec"
-	"os/user"
-	"strconv"
 	"strings"
 	"sync"
-	"syscall"
 	"time"
 
 	"github.com/elastic/beats/libbeat/logp"
@@ -88,29 +85,8 @@ func execCmd(command string) ([]byte, error) {
 	tokens := strings.Split(command, " ")
 	cmd := exec.Command(tokens[0], tokens[1:]...)
 	var out bytes.Buffer
-	usr, err := user.Current()
-	if err != nil {
-		panic(err)
-	}
-
-	uid, err := strconv.Atoi(usr.Uid)
-	if err != nil {
-		panic(err)
-	}
-
-	gid, err := strconv.Atoi(usr.Gid)
-	if err != nil {
-		panic(err)
-	}
 	cmd.Stdout = &out
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Credential: &syscall.Credential{
-			Uid:         uint32(uid),
-			Gid:         uint32(gid),
-			NoSetGroups: true,
-		},
-	}
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		return nil, err
 	}

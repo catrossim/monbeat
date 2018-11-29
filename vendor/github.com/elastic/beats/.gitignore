@@ -33,3 +33,4 @@ beat.db
 *.test
 *.prof
 *.pyc
+*.bak

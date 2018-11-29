@@ -1,0 +1,5 @@
+command:
+  cmds:
+    - cmd: ulimit
+      internal: 10
+  enabled: true

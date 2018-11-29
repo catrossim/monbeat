@@ -16,8 +16,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/catrossim/monbeat/manager/pb"
+	"github.com/catrossim/manager/pb"
 	"github.com/golang/protobuf/ptypes/empty"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type RemoteServer struct {
@@ -30,6 +31,20 @@ func NewServer(workdir string) (*RemoteServer, error) {
 		WorkDir: workdir,
 		logger:  logp.NewLogger("manager server"),
 	}, nil
+}
+
+type HealthImpl struct{}
+
+func (h *HealthImpl) Check(ctx context.Context, req *grpc_health_v1.HealthCheckRequest) (*grpc_health_v1.HealthCheckResponse, error) {
+	return &grpc_health_v1.HealthCheckResponse{
+		Status: grpc_health_v1.HealthCheckResponse_SERVING,
+	}, nil
+}
+
+func (h *HealthImpl) Watch(req *grpc_health_v1.HealthCheckRequest, ws grpc_health_v1.Health_WatchServer) error {
+	return ws.Send(&grpc_health_v1.HealthCheckResponse{
+		Status: grpc_health_v1.HealthCheckResponse_SERVING,
+	})
 }
 
 func (bs *RemoteServer) Ping(context.Context, *empty.Empty) (*pb.Response, error) {
@@ -92,17 +107,3 @@ func execCmd(command string) ([]byte, error) {
 	}
 	return out.Bytes(), nil
 }
-
-// func main() {
-// 	lis, err := net.Listen("tcp", ":30112")
-// 	if err != nil {
-// 		log.Fatalf("failed to listen: %v", err)
-// 	}
-// 	s := grpc.NewServer()
-// 	pb.RegisterRemoteServer(s, &RemoteServer{})
-// 	// Register reflection service on gRPC server.
-// 	reflection.Register(s)
-// 	if err := s.Serve(lis); err != nil {
-// 		log.Fatalf("failed to serve: %v", err)
-// 	}
-// }
