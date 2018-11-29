@@ -53,8 +53,7 @@ func (bm *BaseModule) ErrorChannel() chan error {
 }
 
 type Monitor interface {
-	Monitor() error
+	Monitor(chan struct{}) error
 	Out() chan *common.MapStr
-	DoneChannel() chan struct{}
 	Done()
 }

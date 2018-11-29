@@ -15,20 +15,15 @@ type runner struct {
 	wg        sync.WaitGroup
 }
 
-type Runner interface {
-	Run()
-	Stop()
-}
-
-func NewRunner(mod *ModuleWrapper, client beat.Client) (*runner, error) {
+func NewRunner(mod *ModuleWrapper, client beat.Client) *runner {
 	return &runner{
 		mod:    mod,
 		client: client,
 		done:   make(chan struct{}),
-	}, nil
+	}
 }
 
-func (r *runner) Run() {
+func (r *runner) Start() {
 	r.startOnce.Do(func() {
 		output := r.mod.run(r.done)
 		r.wg.Add(1)
@@ -45,6 +40,10 @@ func (r *runner) Stop() {
 		r.client.Close()
 		r.wg.Wait()
 	})
+}
+
+func (r *runner) String() string {
+	return r.mod.module.Name()
 }
 
 func PublishChannels(client beat.Client, cs ...<-chan beat.Event) {

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/elastic/beats/libbeat/beat"
 	"github.com/elastic/beats/libbeat/logp"
@@ -20,7 +21,7 @@ func (mw *ModuleWrapper) run(done chan struct{}) chan beat.Event {
 	switch m := mw.module.(type) {
 	case Monitor:
 		r := NewReporter(mw, out, done)
-		go mw.start(m, r)
+		go mw.start(m, r, done)
 	default:
 		error := fmt.Errorf("module %s is not supported", m.Name())
 		logp.Error(error)
@@ -28,8 +29,8 @@ func (mw *ModuleWrapper) run(done chan struct{}) chan beat.Event {
 	return out
 }
 
-func (mw *ModuleWrapper) start(mon Monitor, reporter Reporter) {
-	go mon.Monitor()
+func (mw *ModuleWrapper) start(mon Monitor, reporter Reporter, done chan struct{}) {
+	go mon.Monitor(done)
 	for {
 		select {
 		case <-reporter.Done():
@@ -91,4 +92,60 @@ func createModule(r *Register, bm BaseModule) (Module, error) {
 		f = DefaultModuleFactory
 	}
 	return f(bm)
+}
+
+type Reporter interface {
+	Event(e *common.MapStr) bool
+	Error(err error) bool
+	Done() <-chan struct{}
+}
+
+type baseReporter struct {
+	module *ModuleWrapper
+	out    chan beat.Event
+	done   chan struct{}
+}
+
+func NewReporter(module *ModuleWrapper, out chan beat.Event, done chan struct{}) *baseReporter {
+	return &baseReporter{
+		module,
+		out,
+		done,
+	}
+}
+
+func (br *baseReporter) Event(e *common.MapStr) bool {
+	if e == nil {
+		err := errors.New("empty event error")
+		logp.Error(err)
+		br.Error(err)
+		return false
+	}
+
+	event := beat.Event{
+		Timestamp: time.Now().UTC(),
+		Fields:    *e,
+	}
+
+	return writeEvent(event, br.out, br.done)
+}
+
+func (br *baseReporter) Error(err error) bool {
+	e := &common.MapStr{
+		"error": err.Error(),
+	}
+	return br.Event(e)
+}
+
+func (br *baseReporter) Done() <-chan struct{} {
+	return br.done
+}
+
+func writeEvent(event beat.Event, out chan beat.Event, done chan struct{}) bool {
+	select {
+	case <-done:
+		return false
+	case out <- event:
+		return true
+	}
 }
