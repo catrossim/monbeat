@@ -1,5 +1,5 @@
-command:
+- module: command
   cmds:
     - cmd: ulimit
-      internal: 10
+      internal: 10s
   enabled: true

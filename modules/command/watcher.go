@@ -19,6 +19,7 @@ type CmdWatcher struct {
 	internal time.Duration
 	cache    string
 	out      chan *common.MapStr
+	done     chan struct{}
 	err      chan error
 	lock     sync.Mutex
 	logger   *logp.Logger
@@ -31,17 +32,18 @@ func NewCmdWatcher(cmd string, internal time.Duration, out chan *common.MapStr, 
 		out:      out,
 		err:      err,
 		logger:   logger,
+		done:     make(chan struct{}),
 	}, nil
 }
 
-func (cw *CmdWatcher) Watch(done chan struct{}) error {
+func (cw *CmdWatcher) Watch() {
 	ticker := time.NewTicker(cw.internal)
 	cw.logger.Debug("start command watcher")
 	// watch periodlly
 	for {
 		select {
-		case <-done:
-			return nil
+		case <-cw.done:
+			return
 		case <-ticker.C:
 		}
 
@@ -79,6 +81,10 @@ func (cw *CmdWatcher) Watch(done chan struct{}) error {
 			cw.cache = md5Token
 		}
 	}
+}
+
+func (cw *CmdWatcher) Close() {
+	close(cw.done)
 }
 
 func execCmd(command string) ([]byte, error) {

@@ -35,7 +35,7 @@ func NewManager(cfg *common.Config) (*manager, error) {
 	}, nil
 }
 
-func (m *manager) Run() error {
+func (m *manager) Start() error {
 	c, err := net.Listen(m.config.Network, m.config.Address)
 	if err != nil {
 		m.logger.Error(err)
@@ -78,13 +78,17 @@ func (m *manager) Run() error {
 	return nil
 }
 
-func main() {
-	m := &manager{
-		config: &DefaultServerConfig,
-	}
-	err := m.Run()
-	if err != nil {
-		logp.Error(err)
-		return
-	}
+func (m *manager) Stop() {
+
 }
+
+// func main() {
+// 	m := &manager{
+// 		config: &DefaultServerConfig,
+// 	}
+// 	err := m.Run()
+// 	if err != nil {
+// 		logp.Error(err)
+// 		return
+// 	}
+// }

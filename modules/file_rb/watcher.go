@@ -37,6 +37,7 @@ type fileWatcher struct {
 	events          chan *Event
 	out             chan *common.MapStr
 	err             chan error
+	done            chan struct{}
 	cache           os.FileInfo
 	lock            sync.Mutex
 	logger          *logp.Logger
@@ -53,37 +54,37 @@ func NewWatcher(path string, internal time.Duration, fte bool, out chan *common.
 		out:             out,
 		err:             err,
 		logger:          logger,
+		done:            make(chan struct{}),
 	}, nil
 }
 
-func (fw *fileWatcher) Watch(done chan struct{}) error {
+func (fw *fileWatcher) Watch() error {
 	ticker := time.NewTicker(fw.internal)
-	for {
-		// start timer
-		select {
-		case <-done:
-			fw.Close()
-			return nil
-		case <-ticker.C:
-		}
-		// logic for tracking details
-		go fw.watchOnce()
-
-		go func() {
+	go func() {
+		for {
 			select {
 			case event := <-fw.events:
 				fw.logger.Debugf("watcher", "Event [%d] is detected.", event.Op)
 				event.Handle()
-			case <-done:
+			case <-fw.done:
 				return
 			}
-		}()
+		}
+	}()
+	for {
+		// start timer
+		select {
+		case <-fw.done:
+			return nil
+		case <-ticker.C:
+		}
+		// logic for tracking details
+		fw.watchOnce()
 	}
 }
 
 func (fw *fileWatcher) Close() {
-	close(fw.out)
-	close(fw.events)
+	close(fw.done)
 }
 
 func (fw *fileWatcher) watchOnce() {

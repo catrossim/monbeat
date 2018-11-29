@@ -1,6 +1,8 @@
 package file_rb
 
 import (
+	"sync"
+
 	"github.com/catrossim/monbeat/base"
 	"github.com/elastic/beats/libbeat/common"
 	"github.com/elastic/beats/libbeat/logp"
@@ -13,20 +15,15 @@ func init() {
 type FileModule struct {
 	base.BaseModule
 	cfg    *FileConfig
-	done   chan struct{}
 	out    chan *common.MapStr
 	logger *logp.Logger
 }
 
-func (fm *FileModule) DoneChannel() chan struct{} {
-	return fm.done
-}
 func (fm *FileModule) Out() chan *common.MapStr {
 	return fm.out
 }
 func (fm *FileModule) Done() {
 	close(fm.out)
-	close(fm.done)
 }
 
 func New(bm base.BaseModule) (base.Module, error) {
@@ -39,15 +36,14 @@ func New(bm base.BaseModule) (base.Module, error) {
 	return &FileModule{
 		bm,
 		cfg,
-		make(chan struct{}),
 		make(chan *common.MapStr),
 		logp.NewLogger("file_rb"),
 	}, nil
 }
 
-func (fm *FileModule) Monitor() error {
+func (fm *FileModule) Monitor(done chan struct{}) error {
 	fm.logger.Debugf("%d targets are detected.", len(fm.cfg.Paths))
-
+	var wg sync.WaitGroup
 	for _, path := range fm.cfg.Paths {
 		pathCfg := DefaultPathConfig
 		err := path.Unpack(pathCfg)
@@ -61,10 +57,17 @@ func (fm *FileModule) Monitor() error {
 			fm.ErrorChannel() <- err
 			return err
 		}
-		go watcher.Watch(fm.done)
-
+		wg.Add(1)
+		go watcher.Watch()
+		go func() {
+			defer wg.Done()
+			<-done
+			watcher.Close()
+		}()
 		fm.logger.Debugf("Monitor %s started.", pathCfg.Path)
 
 	}
+	wg.Wait()
+	fm.Done()
 	return nil
 }

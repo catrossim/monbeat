@@ -1,6 +1,8 @@
 package command
 
 import (
+	"sync"
+
 	"github.com/catrossim/monbeat/base"
 	"github.com/elastic/beats/libbeat/common"
 	"github.com/elastic/beats/libbeat/logp"
@@ -13,22 +15,16 @@ func init() {
 type CommandModule struct {
 	base.BaseModule
 	config *CommandsConfig
-	done   chan struct{}
 	out    chan *common.MapStr
 	logger *logp.Logger
 }
 
 func (cm *CommandModule) Done() {
-	close(cm.done)
 	close(cm.out)
 }
 
 func (cm *CommandModule) Out() chan *common.MapStr {
 	return cm.out
-}
-
-func (cm *CommandModule) DoneChannel() chan struct{} {
-	return cm.done
 }
 
 func New(bm base.BaseModule) (base.Module, error) {
@@ -39,13 +35,13 @@ func New(bm base.BaseModule) (base.Module, error) {
 	return &CommandModule{
 		bm,
 		config,
-		make(chan struct{}),
 		make(chan *common.MapStr),
 		logp.NewLogger("command"),
 	}, nil
 }
 
-func (cm *CommandModule) Monitor() error {
+func (cm *CommandModule) Monitor(done chan struct{}) error {
+	var wg sync.WaitGroup
 	for _, rawCfg := range cm.config.Cmds {
 		cmdCfg := DefaultCmdConfig
 		if err := rawCfg.Unpack(cmdCfg); err != nil {
@@ -58,13 +54,15 @@ func (cm *CommandModule) Monitor() error {
 			cm.ErrorChannel() <- err
 			continue
 		}
+		wg.Add(1)
+		go watcher.Watch()
 		go func() {
-			err := watcher.Watch(cm.done)
-			if err != nil {
-				cm.logger.Error(err)
-				cm.ErrorChannel() <- err
-			}
+			defer wg.Done()
+			<-done
+			watcher.Close()
 		}()
 	}
+	wg.Wait()
+	cm.Done()
 	return nil
 }

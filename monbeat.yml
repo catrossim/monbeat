@@ -2,7 +2,11 @@
 
 ############################# Monbeat ######################################
 
-monbeat.config.modules:
+monbeat.config:
+  modules:
+    path: conf.d/*.yml
+    reload.enabled: true
+    reload.period: 10s
   data.dir: /tmp/monbeat
   manager:
     network: tcp
@@ -15,6 +19,7 @@ monbeat.config.modules:
         - ping
       deregister.after: 1m
       interval: 10s
+    enabled: false
 
 
 #================================ General =====================================
